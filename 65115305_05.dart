@@ -1,22 +1,33 @@
-void addStudent(student,name){
-   student.add(name);
-   print("Student $name added.");
-  }
-void removeStudent(student,name){
-  if (student.contains(name)){
-    student.remove(name);
+void addStudent(students, name) {
+  students.add(name);
+  print("Student $name added.");
+}
+
+void removeStudent(students, name) {
+  if (students.contains(name)) {
+    students.remove(name);
     print("Student $name removed.");
-  }else{
+  } else {
     print("Student $name Not found.");
   }
 }
-void displayStudents(student){
-  if (student.isEmpty) {
+
+void displayStudents(students) {
+  if (students.isEmpty) {
     print("No students in the list");
   } else {
-    print("student $name");
+    print("student $students");
   }
 }
+
 void main() {
-  
+  List<String> students = [];
+  addStudent(students, "Chanankorn");
+  addStudent(students, "Jonksuk");
+  addStudent(students, "Sirirat");
+  addStudent(students, "Birawit");
+  displayStudents(students);
+  removeStudent(students, "CJ");
+  removeStudent(students, "Jonksuk");
+  displayStudents(students);
 }
