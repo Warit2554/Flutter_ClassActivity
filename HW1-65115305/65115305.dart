@@ -39,7 +39,7 @@ class Restaurant {
         orders = [],
         tables = {};
 
-  // CRUD operations for MenuItem
+// CRUD ---------------------------------------------------
   void createMenuItem(String name, double price, String category) {
     MenuItem item = MenuItem(name: name, price: price, category: category);
     menu.add(item);
@@ -54,7 +54,8 @@ class Restaurant {
     return null;
   }
 
-  void updateMenuItem(String oldName, String newName, double newPrice, String newCategory) {
+  void updateMenuItem(
+      String oldName, String newName, double newPrice, String newCategory) {
     for (MenuItem item in menu) {
       if (item.name == oldName) {
         item.name = newName;
@@ -69,11 +70,12 @@ class Restaurant {
     menu.removeWhere((item) => item.name == name);
   }
 
-  // CRUD operations for Order
+// CRUD ---------------------------------------------------end
+// CRUD ---------------------------------------------------
   void createOrder(int orderId, int tableNumber) {
     Order order = Order(orderId: orderId, tableNumber: tableNumber);
     orders.add(order);
-    tables[tableNumber] = true; // Mark the table as occupied
+    tables[tableNumber] = true;
   }
 
   Order? readOrder(int orderId) {
@@ -108,6 +110,7 @@ class Restaurant {
       }
     }
   }
+// CRUD ---------------------------------------------------end
 
   MenuItem? getMenuItem(String name) {
     for (MenuItem item in menu) {
@@ -129,71 +132,89 @@ class Restaurant {
 }
 
 void main() {
-  // สร้างร้านอาหาร
-  Restaurant restaurant = Restaurant();
-
-  // เพิ่มเมนูอาหาร
-  restaurant.createMenuItem('Pasta', 12.5, 'Main Course');
-  restaurant.createMenuItem('Caesar Salad', 8.0, 'Appetizer');
-  restaurant.createMenuItem('Cheesecake', 6.5, 'Dessert');
-
-  // อ่านและแสดงเมนู
-  print('--- Menu ---');
-  restaurant.menu.forEach((item) {
-    print('${item.name} - ${item.price} USD - ${item.category}');
+  //Restaurant ----------------------------------------------------------
+  Restaurant araimairu = Restaurant();
+  //Create
+  araimairu.createMenuItem('ข้าวผัดกระเพราะไข่เยี่ยวหมา', 120, 'อาหารจารเดียว');
+  araimairu.createMenuItem('สลัดผัก', 80, 'ของทานเล่น');
+  araimairu.createMenuItem('บลาวนี่', 50, 'ของหวาน');
+  //Read
+//   print("<---- MENU ---->");
+//   araimairu.menu.forEach((item) {
+//     print('${item.name}  ${item.price} BAHT  ${item.category}');
+//   });
+  //Update
+  araimairu.updateMenuItem(
+      'ข้าวผัดกระเพราะไข่เยี่ยวหมา', 'ข้าวไข่เจียว', 40, 'อาหารจานเดียว');
+  //Del
+  araimairu.deleteMenuItem('สลัดผัก');
+  //Read
+  print('\n<---- MENU ---->');
+  araimairu.menu.forEach((item) {
+    print('${item.name}  ${item.price} BAHT  ${item.category}');
   });
+  //Restaurant end
 
-  // อัปเดตเมนู
-  restaurant.updateMenuItem('Pasta', 'Spaghetti Carbonara', 13.0, 'Main Course');
+  //Order ----------------------------------------------------------
 
-  // ลบเมนู
-  restaurant.deleteMenuItem('Caesar Salad');
+  //Create order for orderId = 1 Table = 10
+  araimairu.createOrder(1, 1);
+  araimairu.createOrder(2, 2);
+  araimairu.createOrder(3, 3);
+  araimairu.createOrder(4, 4);
+  araimairu.createOrder(5, 5);
 
-  // อ่านและแสดงเมนูหลังการอัปเดตและลบ
-  print('\n--- Updated Menu ---');
-  restaurant.menu.forEach((item) {
-    print('${item.name} - ${item.price} USD - ${item.category}');
-  });
-
-  // สร้างออเดอร์
-  restaurant.createOrder(1, 10);
-  Order? order = restaurant.readOrder(1);
+  //Specific for orderId = 1
+  Order? order = araimairu.readOrder(1);
   if (order != null) {
-    order.addItem(restaurant.getMenuItem('Spaghetti Carbonara')!);
-    order.addItem(restaurant.getMenuItem('Cheesecake')!);
+    order.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+    order.addItem(araimairu.getMenuItem('บลาวนี่')!);
+  }
+  Order? order2 = araimairu.readOrder(2);
+  if (order2 != null) {
+    order2.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+    order2.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+  }
+  Order? order3 = araimairu.readOrder(3);
+  if (order3 != null) {
+    order3.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+    order3.addItem(araimairu.getMenuItem('บลาวนี่')!);
+  }
+  Order? order4 = araimairu.readOrder(4);
+  if (order4 != null) {
+    order4.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+    order4.addItem(araimairu.getMenuItem('บลาวนี่')!);
+  }
+  Order? order5 = araimairu.readOrder(5);
+  if (order5 != null) {
+    order5.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
+    order5.addItem(araimairu.getMenuItem('บลาวนี่')!);
   }
 
-  // อ่านและแสดงออเดอร์
-  print('\n--- Orders ---');
-  restaurant.orders.forEach((order) {
-    print('Order ID: ${order.orderId} - Table: ${order.tableNumber}');
+  //Read
+  print('\n<---- Orders ---->');
+  araimairu.orders.forEach((order) {
+    print('\nOrder ID: ${order.orderId} Table: ${order.tableNumber}');
     order.items.forEach((item) {
-      print('  ${item.name} - ${item.price} USD');
+      print('-${item.name} ${item.price} BAHT');
     });
   });
 
-  // อัปเดตออเดอร์
   if (order != null) {
-    order.removeItem(restaurant.getMenuItem('Cheesecake')!);
-    order.addItem(restaurant.getMenuItem('Spaghetti Carbonara')!);
+    order.removeItem(araimairu.getMenuItem('บลาวนี่')!);
+    order.addItem(araimairu.getMenuItem('ข้าวไข่เจียว')!);
   }
 
-  // ลบออเดอร์
-  restaurant.deleteOrder(1);
+  //complete than ว่าง โต๊ะ
+  araimairu.completeOrder(1);
+  araimairu.completeOrder(2);
+  araimairu.completeOrder(5);
 
-  // แสดงสถานะของโต๊ะ
-  print('\n--- Table Status ---');
-  restaurant.tables.forEach((tableNumber, isOccupied) {
-    print('Table $tableNumber: ${isOccupied ? 'Occupied' : 'Available'}');
-  });
+  //Status Table ----------------------------------------------------------
 
-  // สร้างออเดอร์ใหม่และทำให้เสร็จสมบูรณ์
-  restaurant.createOrder(2, 12);
-  restaurant.completeOrder(2);
-
-  // แสดงสถานะของโต๊ะหลังทำออเดอร์เสร็จ
-  print('\n--- Updated Table Status ---');
-  restaurant.tables.forEach((tableNumber, isOccupied) {
-    print('Table $tableNumber: ${isOccupied ? 'Occupied' : 'Available'}');
+  print('\n<---- Table Status ---->');
+  araimairu.tables.forEach((tableNumber, isOccupied) {
+    print(
+        'Table $tableNumber: ${isOccupied ? 'ไม่ว่าง' : 'ว่าง กินเสร็จแล้ว'}');
   });
 }
